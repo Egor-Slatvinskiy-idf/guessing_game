@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:untitled1/home_widget/home_model.dart';
 
 class HomeWidget extends StatefulWidget {
@@ -11,35 +12,11 @@ class HomeWidget extends StatefulWidget {
 }
 
 class _HomeWidgetState extends State<HomeWidget> {
-  bool checkCounter = true;
-  int counter = 3;
-  final model = HomeModel();
-
-  void decrementCounter() {
-    model.guessed();
-    setState(() {
-      counter--;
-      if (counter == 0) {
-        checkCounter = false;
-      }
-      if (counter == 3) {
-        checkCounter = true;
-      }
-    });
-  }
 
   @override
-  void initState() {
-    super.initState();
-    model.generateNum();
-  }
-
-  void updateCounter() {
-    setState(() {
-      counter = 3;
-      model.generateNum();
-      checkCounter = true;
-    });
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    context.read<HomeModel>().generateNum();
   }
 
   @override
@@ -48,16 +25,22 @@ class _HomeWidgetState extends State<HomeWidget> {
       backgroundColor: Colors.white,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const _HeaderWidget(),
+        children: const [
+          _HeaderWidget(),
           _FormWidget(),
-          const _BottomWidget(),
+          _BottomWidget(),
         ],
       ),
     );
   }
+}
 
-  Center _FormWidget() {
+class _FormWidget extends StatelessWidget {
+  const _FormWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final model = context.watch<HomeModel>();
     const styleBorder = OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(15)),
       borderSide: BorderSide(
@@ -66,75 +49,82 @@ class _HomeWidgetState extends State<HomeWidget> {
       ),
     );
     return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (model.isGuessed == true) ...[
-                const Text(
-                  'unsuccessful attempt',
-                  style: TextStyle(fontSize: 16, color: Colors.red),
-                ),
-              ],
-              if (model.isGuessed == false) ...[
-                const Text(
-                  'you guessed!',
-                  style: TextStyle(fontSize: 16, color: Colors.blue),
-                ),
-              ],
-              const SizedBox(
-                height: 10,
-              ),
-              SizedBox(
-                width: 150,
-                child: Text(
-                  'you have $counter attempts left',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 24,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              SizedBox(
-                width: 150,
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  autofocus: true,
-                  controller: model.numController,
-                  style: const TextStyle(
-                      color: Colors.black, fontSize: 24, height: 2),
-                  decoration: const InputDecoration(
-                    labelText: 'random num',
-                    labelStyle: TextStyle(
-                      color: Colors.grey,
-                    ),
-                    enabledBorder: styleBorder,
-                    focusedBorder: styleBorder,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                  ),
-                ),
-              ),
-              _ButtonsWidget(),
-            ],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (model.isGuessed == true) ...[
+            const Text(
+              'unsuccessful attempt',
+              style: TextStyle(fontSize: 16, color: Colors.red),
+            ),
+          ],
+          if (model.isGuessed == false) ...[
+            const Text(
+              'you guessed!',
+              style: TextStyle(fontSize: 16, color: Colors.blue),
+            ),
+          ],
+          const SizedBox(
+            height: 10,
           ),
-        );
+          SizedBox(
+            width: 150,
+            child: Text(
+              'you have ${model.counter} attempts left',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 24,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          SizedBox(
+            width: 150,
+            child: TextField(
+              keyboardType: TextInputType.number,
+              autofocus: true,
+              controller: model.numController,
+              style: const TextStyle(
+                  color: Colors.black, fontSize: 24, height: 2),
+              decoration: const InputDecoration(
+                labelText: 'random num',
+                labelStyle: TextStyle(
+                  color: Colors.grey,
+                ),
+                enabledBorder: styleBorder,
+                focusedBorder: styleBorder,
+                contentPadding: EdgeInsets.symmetric(horizontal: 10),
+              ),
+            ),
+          ),
+          const _ButtonsWidget(),
+        ],
+      ),
+    );
   }
+}
 
-  Row _ButtonsWidget() {
+class _ButtonsWidget extends StatelessWidget {
+  const _ButtonsWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final model = context.watch<HomeModel>();
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ElevatedButton(
-          onPressed: updateCounter,
+          onPressed: () => model.updateCounter(),
           child: const Icon(Icons.refresh),
         ),
         const SizedBox(
           width: 20,
         ),
         ElevatedButton(
-          onPressed: checkCounter ? decrementCounter : null,
+          onPressed: model.checkCounter ? model.decrementCounter : null,
           child: const Icon(Icons.done),
         ),
       ],
