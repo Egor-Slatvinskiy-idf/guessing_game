@@ -1,12 +1,16 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:untitled1/usecaseeee/usecases.dart';
 
 class HomeModel extends ChangeNotifier {
+  final useCase = ChheckNum();
   bool checkCounter = true;
   int counter = 3;
   final numController = TextEditingController();
   bool? isGuessed;
   String? rNumber;
+
+  // HomeModel({required this.useCase});
 
 
   void updateCounter() {
@@ -38,6 +42,9 @@ class HomeModel extends ChangeNotifier {
 
   void guessed() {
     final num = numController.text;
+
+    // final params = GuessedNum(guessedNum: num, randomNum: rNumber);
+    // final dssdsd = useCase(params);
     if(num == rNumber) {
       checkCounter = false;
       isGuessed = false;
@@ -46,5 +53,4 @@ class HomeModel extends ChangeNotifier {
     }
     notifyListeners();
   }
-
 }

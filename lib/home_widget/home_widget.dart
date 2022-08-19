@@ -19,6 +19,7 @@ class _HomeWidgetState extends State<HomeWidget> {
     context.read<HomeModel>().generateNum();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
