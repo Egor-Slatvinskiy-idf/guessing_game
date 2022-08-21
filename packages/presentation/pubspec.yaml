@@ -13,7 +13,6 @@ dependencies:
   domain:
     path: ../domain
 
-  provider: ^6.0.3
   bloc: ^8.1.0
   equatable: ^2.0.5
   flutter_bloc: ^8.1.1
