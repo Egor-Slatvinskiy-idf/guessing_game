@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:untitled1/bloc/bloc.dart';
-import 'package:untitled1/bloc/bloc_event.dart';
-import 'package:untitled1/bloc/bloc_state.dart';
+import '../../bloc/bloc.dart';
+import '../../bloc/bloc_event.dart';
+import '../../bloc/bloc_state.dart';
 
 class HomeWidget extends StatelessWidget {
   const HomeWidget({Key? key}) : super(key: key);
@@ -10,7 +10,7 @@ class HomeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => GuessedBloc(1)..add(const GuessedStartEvent()),
+      create: (_) => GuessedBloc(0)..add(const GuessedStartEvent()),
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Column(
@@ -66,9 +66,7 @@ class _FormWidget extends StatelessWidget {
                   ),
                 ],
               ],
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               SizedBox(
                 width: 150,
                 child: Text(
@@ -79,9 +77,7 @@ class _FormWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               SizedBox(
                 width: 150,
                 child: TextField(
@@ -91,7 +87,7 @@ class _FormWidget extends StatelessWidget {
                   style: const TextStyle(
                       color: Colors.black, fontSize: 24, height: 2),
                   decoration: const InputDecoration(
-                    labelText: 'random num',
+                    labelText: '0 to 3',
                     labelStyle: TextStyle(
                       color: Colors.grey,
                     ),
@@ -124,6 +120,7 @@ class _ButtonsWidget extends StatelessWidget {
                 onPressed: null,
                 child: Icon(Icons.refresh),
               ),
+              const SizedBox(width: 5),
               ElevatedButton(
                 onPressed: () => context.read<GuessedBloc>().add(
                       const GuessedCheckEvent(),
@@ -138,6 +135,7 @@ class _ButtonsWidget extends StatelessWidget {
                     ),
                 child: const Icon(Icons.refresh),
               ),
+              const SizedBox(width: 5),
               const ElevatedButton(
                 onPressed: null,
                 child: Icon(Icons.done),
@@ -148,6 +146,7 @@ class _ButtonsWidget extends StatelessWidget {
                 onPressed: null,
                 child: Icon(Icons.refresh),
               ),
+              const SizedBox(width: 5),
               ElevatedButton(
                 onPressed: () => context.read<GuessedBloc>().add(
                   const GuessedCheckEvent(),
@@ -162,6 +161,7 @@ class _ButtonsWidget extends StatelessWidget {
                 ),
                 child: const Icon(Icons.refresh),
               ),
+              const SizedBox(width: 5),
               const ElevatedButton(
                 onPressed: null,
                 child: Icon(Icons.done),

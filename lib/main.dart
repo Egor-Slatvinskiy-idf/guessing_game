@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:untitled1/bloc/home_bloc_widget.dart';
+import 'package:presentation/ui/home_page/home_widget.dart';
 
 void main() {
   runApp(const MyApp());
