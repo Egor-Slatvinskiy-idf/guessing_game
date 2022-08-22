@@ -6,7 +6,7 @@ class GenerateNumUseCase extends UseCaseOut<String> {
   String call() => generateNum();
 
   String generateNum() {
-    final rNumber = Random().nextInt(3).toString();
-    return rNumber;
+    final randomNum = Random().nextInt(3).toString();
+    return randomNum;
   }
 }

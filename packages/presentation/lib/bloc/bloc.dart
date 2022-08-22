@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:presentation/bloc/bloc_event.dart';
 import 'package:presentation/bloc/bloc_state.dart';
 
+const _initCounter = 3;
+
 class GuessedBloc extends Bloc<GuessedEvent, GuessedState> {
   final _checkUseCase = CheckNumUseCase();
   late int _counter;
-  late String _rNumber;
+  late String _randomNum;
   late bool _isGuessed;
   final numController = TextEditingController();
 
@@ -26,19 +28,19 @@ class GuessedBloc extends Bloc<GuessedEvent, GuessedState> {
       GuessedRefreshEvent event, Emitter<GuessedState> emit) {
     emit(
       GuessedInitialState(
-        rNumber: _rNumber,
-        counter: 3,
+        rNumber: _randomNum,
+        counter: _initCounter,
       ),
     );
   }
 
   void _onGuessedStartEvent(
       GuessedStartEvent event, Emitter<GuessedState> emit) {
-    _rNumber = GenerateNumUseCase().call();
-    _counter = 3;
+    _randomNum = GenerateNumUseCase().call();
+    _counter = _initCounter;
     emit(
       GuessedInitialState(
-        rNumber: _rNumber,
+        rNumber: _randomNum,
         counter: _counter,
       ),
     );
@@ -47,7 +49,7 @@ class GuessedBloc extends Bloc<GuessedEvent, GuessedState> {
   void _onGuessedCheckEvent(
       GuessedCheckEvent event, Emitter<GuessedState> emit) {
     final enteredNum = numController.text;
-    final params = Num(guessedNum: enteredNum, randomNum: _rNumber);
+    final params = Num(guessedNum: enteredNum, randomNum: _randomNum);
     final compare = _checkUseCase(params);
     if (compare) {
       _isGuessed = true;

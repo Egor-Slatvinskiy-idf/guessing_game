@@ -4,13 +4,15 @@ import '../../bloc/bloc.dart';
 import '../../bloc/bloc_event.dart';
 import '../../bloc/bloc_state.dart';
 
+const initCounter = 0;
+
 class HomeWidget extends StatelessWidget {
   const HomeWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => GuessedBloc(0)..add(const GuessedStartEvent()),
+      create: (_) => GuessedBloc(initCounter)..add(const GuessedStartEvent()),
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Column(
@@ -20,6 +22,7 @@ class HomeWidget extends StatelessWidget {
             Column(
               children: const [
                 _FormWidget(),
+                _TextFieldWidget(),
                 _ButtonsWidget(),
               ],
             ),
@@ -36,14 +39,6 @@ class _FormWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = context.watch<GuessedBloc>();
-    const styleBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(15)),
-      borderSide: BorderSide(
-        color: Colors.black,
-        width: 1.5,
-      ),
-    );
     return BlocBuilder<GuessedBloc, GuessedState>(
       builder: (context, state) {
         return Center(
@@ -78,29 +73,48 @@ class _FormWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              SizedBox(
-                width: 150,
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  autofocus: true,
-                  controller: model.numController,
-                  style: const TextStyle(
-                      color: Colors.black, fontSize: 24, height: 2),
-                  decoration: const InputDecoration(
-                    labelText: '0 to 3',
-                    labelStyle: TextStyle(
-                      color: Colors.grey,
-                    ),
-                    enabledBorder: styleBorder,
-                    focusedBorder: styleBorder,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                  ),
-                ),
-              ),
             ],
           ),
         );
       },
+    );
+  }
+}
+
+class _TextFieldWidget extends StatelessWidget {
+  const _TextFieldWidget({
+    Key? key,
+  }) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    final model = context.watch<GuessedBloc>();
+    const styleBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(15)),
+      borderSide: BorderSide(
+        color: Colors.black,
+        width: 1.5,
+      ),
+    );
+    return SizedBox(
+      width: 150,
+      child: TextField(
+        keyboardType: TextInputType.number,
+        autofocus: true,
+        controller: model.numController,
+        style: const TextStyle(
+            color: Colors.black, fontSize: 24, height: 2),
+        decoration: const InputDecoration(
+          labelText: '0 to 3',
+          labelStyle: TextStyle(
+            color: Colors.grey,
+          ),
+          enabledBorder: styleBorder,
+          focusedBorder: styleBorder,
+          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+        ),
+      ),
     );
   }
 }
