@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:domain/entity/number.dart';
-import 'package:domain/usecase/check_usecase.dart';
-import 'package:domain/usecase/generate_usecase.dart';
+import 'package:domain/use_case/check_use_case.dart';
+import 'package:domain/use_case/generate_use_case.dart';
 import 'package:flutter/material.dart';
 import 'package:presentation/bloc/bloc_event.dart';
 import 'package:presentation/bloc/bloc_state.dart';
@@ -17,7 +17,7 @@ class GuessedBloc extends Bloc<GuessedEvent, GuessedState> {
 
   GuessedBloc(this._counter)
       : super(
-          GuessedInitialState(rNumber: '', counter: _counter),
+          GuessedInitialState(randomNum: '', counter: _counter),
         ) {
     on<GuessedStartEvent>(_onGuessedStartEvent);
     on<GuessedCheckEvent>(_onGuessedCheckEvent);
@@ -28,7 +28,7 @@ class GuessedBloc extends Bloc<GuessedEvent, GuessedState> {
       GuessedRefreshEvent event, Emitter<GuessedState> emit) {
     emit(
       GuessedInitialState(
-        rNumber: _randomNum,
+        randomNum: _randomNum,
         counter: _initCounter,
       ),
     );
@@ -40,7 +40,7 @@ class GuessedBloc extends Bloc<GuessedEvent, GuessedState> {
     _counter = _initCounter;
     emit(
       GuessedInitialState(
-        rNumber: _randomNum,
+        randomNum: _randomNum,
         counter: _counter,
       ),
     );

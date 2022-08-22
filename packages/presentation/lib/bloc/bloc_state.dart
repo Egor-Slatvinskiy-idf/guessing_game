@@ -10,11 +10,11 @@ abstract class GuessedState extends Equatable {
 }
 
 class GuessedInitialState extends GuessedState {
-  final String rNumber;
+  final String randomNum;
 
   const GuessedInitialState({
     required super.counter,
-    required this.rNumber,
+    required this.randomNum,
   });
 }
 

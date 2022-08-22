@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../bloc/bloc.dart';
-import '../../bloc/bloc_event.dart';
-import '../../bloc/bloc_state.dart';
+import 'package:presentation/bloc/bloc.dart';
+import 'package:presentation/bloc/bloc_event.dart';
+import 'package:presentation/bloc/bloc_state.dart';
 
 const initCounter = 0;
 
@@ -168,7 +168,7 @@ class _ButtonsWidget extends StatelessWidget {
                 child: const Icon(Icons.done),
               ),
             ],
-            if(state.counter == 0 && state is !GuessedSuccessState) ...[
+            if(state.counter == initCounter && state is !GuessedSuccessState) ...[
               ElevatedButton(
                 onPressed: () => context.read<GuessedBloc>().add(
                   const GuessedStartEvent(),

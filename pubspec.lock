@@ -58,7 +58,7 @@ packages:
     source: hosted
     version: "1.0.5"
   domain:
-    dependency: "direct main"
+    dependency: transitive
     description:
       path: "packages/domain"
       relative: true
