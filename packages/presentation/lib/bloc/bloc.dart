@@ -9,15 +9,19 @@ import 'package:presentation/bloc/bloc_state.dart';
 const _initCounter = 3;
 
 class GuessedBloc extends Bloc<GuessedEvent, GuessedState> {
-  final _checkUseCase = CheckNumUseCase();
-  late int _counter;
-  late String _randomNum;
-  late bool _isGuessed;
   final numController = TextEditingController();
+  final GenerateNumUseCase generateNumUseCase;
+  final CheckNumUseCase checkUseCase;
+  int counter;
+  String randomNum;
 
-  GuessedBloc(this._counter)
-      : super(
-          GuessedInitialState(randomNum: '', counter: _counter),
+  GuessedBloc({
+    required this.generateNumUseCase,
+    required this.counter,
+    required this.checkUseCase,
+    required this.randomNum,
+  }) : super(
+          const GuessedInitialState(),
         ) {
     on<GuessedStartEvent>(_onGuessedStartEvent);
     on<GuessedCheckEvent>(_onGuessedCheckEvent);
@@ -25,43 +29,47 @@ class GuessedBloc extends Bloc<GuessedEvent, GuessedState> {
   }
 
   void _onGuessedRefreshEvent(
-      GuessedRefreshEvent event, Emitter<GuessedState> emit) {
+    GuessedRefreshEvent event,
+    Emitter<GuessedState> emit,
+  ) {
     emit(
       GuessedInitialState(
-        randomNum: _randomNum,
+        randomNum: randomNum,
         counter: _initCounter,
       ),
     );
   }
 
   void _onGuessedStartEvent(
-      GuessedStartEvent event, Emitter<GuessedState> emit) {
-    _randomNum = GenerateNumUseCase().call();
-    _counter = _initCounter;
+    GuessedStartEvent event,
+    Emitter<GuessedState> emit,
+  ) {
+    randomNum = generateNumUseCase();
+    counter = _initCounter;
     emit(
       GuessedInitialState(
-        randomNum: _randomNum,
-        counter: _counter,
+        randomNum: randomNum,
+        counter: counter,
       ),
     );
   }
 
   void _onGuessedCheckEvent(
-      GuessedCheckEvent event, Emitter<GuessedState> emit) {
+    GuessedCheckEvent event,
+    Emitter<GuessedState> emit,
+  ) {
     final enteredNum = numController.text;
-    final params = Num(guessedNum: enteredNum, randomNum: _randomNum);
-    final compare = _checkUseCase(params);
-    if (compare) {
-      _isGuessed = true;
-      _counter--;
+    final params = Num(guessedNum: enteredNum, randomNum: randomNum);
+    final isGuessSuccess = checkUseCase(params);
+    if (isGuessSuccess) {
+      counter--;
       emit(
-        GuessedSuccessState(isGuessed: _isGuessed, counter: _counter),
+        GuessedSuccessState(counter: counter),
       );
     } else {
-      _isGuessed = false;
-      _counter--;
+      counter--;
       emit(
-        GuessedFailureState(isGuessed: _isGuessed, counter: _counter),
+        GuessedFailureState(counter: counter),
       );
     }
   }

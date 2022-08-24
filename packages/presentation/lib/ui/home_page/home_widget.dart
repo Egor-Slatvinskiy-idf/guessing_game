@@ -1,10 +1,11 @@
+import 'package:domain/use_case/check_use_case.dart';
+import 'package:domain/use_case/generate_use_case.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:presentation/bloc/bloc.dart';
 import 'package:presentation/bloc/bloc_event.dart';
 import 'package:presentation/bloc/bloc_state.dart';
-
-const initCounter = 0;
+import 'package:presentation/entity/model_guessed_game.dart';
 
 class HomeWidget extends StatelessWidget {
   const HomeWidget({Key? key}) : super(key: key);
@@ -12,7 +13,12 @@ class HomeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => GuessedBloc(initCounter)..add(const GuessedStartEvent()),
+      create: (_) => GuessedBloc(
+        counter: ModelGuessedGame.initCounter,
+        checkUseCase: CheckNumUseCase(),
+        randomNum: ModelGuessedGame.initRandomNum,
+        generateNumUseCase: GenerateNumUseCase(),
+      )..add(const GuessedStartEvent()),
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Column(
@@ -46,20 +52,16 @@ class _FormWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (state is GuessedSuccessState) ...[
-                if (state.isGuessed == true) ...[
-                  const Text(
-                    'you guessed!',
-                    style: TextStyle(fontSize: 16, color: Colors.blue),
-                  ),
-                ],
+                const Text(
+                  'you guessed!',
+                  style: TextStyle(fontSize: 16, color: Colors.blue),
+                ),
               ],
-              if(state is GuessedFailureState) ...[
-                if (state.isGuessed == false) ...[
-                  const Text(
-                    'unsuccessful attempt',
-                    style: TextStyle(fontSize: 16, color: Colors.red),
-                  ),
-                ],
+              if (state is GuessedFailureState) ...[
+                const Text(
+                  'unsuccessful attempt',
+                  style: TextStyle(fontSize: 16, color: Colors.red),
+                ),
               ],
               const SizedBox(height: 10),
               SizedBox(
@@ -86,7 +88,6 @@ class _TextFieldWidget extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     final model = context.watch<GuessedBloc>();
@@ -103,8 +104,7 @@ class _TextFieldWidget extends StatelessWidget {
         keyboardType: TextInputType.number,
         autofocus: true,
         controller: model.numController,
-        style: const TextStyle(
-            color: Colors.black, fontSize: 24, height: 2),
+        style: const TextStyle(color: Colors.black, fontSize: 24, height: 2),
         decoration: const InputDecoration(
           labelText: '0 to 3',
           labelStyle: TextStyle(
@@ -129,58 +129,32 @@ class _ButtonsWidget extends StatelessWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (state is GuessedInitialState) ...[
-              const ElevatedButton(
-                onPressed: null,
-                child: Icon(Icons.refresh),
-              ),
-              const SizedBox(width: 5),
-              ElevatedButton(
-                onPressed: () => context.read<GuessedBloc>().add(
-                      const GuessedCheckEvent(),
-                    ),
-                child: const Icon(Icons.done),
-              ),
-            ],
-            if (state is GuessedSuccessState) ...[
-              ElevatedButton(
-                onPressed: () => context.read<GuessedBloc>().add(
-                      const GuessedStartEvent(),
-                    ),
-                child: const Icon(Icons.refresh),
-              ),
-              const SizedBox(width: 5),
-              const ElevatedButton(
-                onPressed: null,
-                child: Icon(Icons.done),
-              ),
-            ],
-            if (state is GuessedFailureState && state.counter > 0) ...[
-              const ElevatedButton(
-                onPressed: null,
-                child: Icon(Icons.refresh),
-              ),
-              const SizedBox(width: 5),
-              ElevatedButton(
-                onPressed: () => context.read<GuessedBloc>().add(
-                  const GuessedCheckEvent(),
-                ),
-                child: const Icon(Icons.done),
-              ),
-            ],
-            if(state.counter == initCounter && state is !GuessedSuccessState) ...[
-              ElevatedButton(
-                onPressed: () => context.read<GuessedBloc>().add(
-                  const GuessedStartEvent(),
-                ),
-                child: const Icon(Icons.refresh),
-              ),
-              const SizedBox(width: 5),
-              const ElevatedButton(
-                onPressed: null,
-                child: Icon(Icons.done),
-              ),
-            ],
+            ElevatedButton(
+              onPressed: state is GuessedSuccessState ||
+                      state.counter == ModelGuessedGame.initCounter &&
+                          state is! GuessedSuccessState
+                  ? () {
+                      context.read<GuessedBloc>().add(
+                            const GuessedStartEvent(),
+                          );
+                    }
+                  : null,
+              child: const Icon(Icons.refresh),
+            ),
+            const SizedBox(
+              width: 5,
+            ),
+            ElevatedButton(
+              onPressed: state is GuessedInitialState ||
+                      state is GuessedFailureState && state.counter > 0
+                  ? () {
+                      context
+                          .read<GuessedBloc>()
+                          .add(const GuessedCheckEvent());
+                    }
+                  : null,
+              child: const Icon(Icons.done),
+            ),
           ],
         );
       },
