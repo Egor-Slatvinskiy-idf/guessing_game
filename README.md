@@ -1,6 +1,6 @@
 # untitled1
 
-A new Flutter project.
+A new Guessed game project.
 
 ## Getting Started
 
