@@ -1,6 +1,6 @@
 class Num {
   final String guessedNum;
-  final String randomNum;
+  final String? randomNum;
 
   Num({
     required this.guessedNum,

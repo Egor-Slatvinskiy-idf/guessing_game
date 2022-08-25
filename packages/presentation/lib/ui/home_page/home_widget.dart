@@ -14,9 +14,9 @@ class HomeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => GuessedBloc(
-        counter: ModelGuessedGame.initCounter,
+        counter: Model.initCounter,
         checkUseCase: CheckNumUseCase(),
-        randomNum: ModelGuessedGame.initRandomNum,
+        randomNum: Model.initRandomNum,
         generateNumUseCase: GenerateNumUseCase(),
       )..add(const GuessedStartEvent()),
       child: Scaffold(
@@ -131,7 +131,7 @@ class _ButtonsWidget extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: state is GuessedSuccessState ||
-                      state.counter == ModelGuessedGame.initCounter &&
+                      state.counter == Model.initCounter &&
                           state is! GuessedSuccessState
                   ? () {
                       context.read<GuessedBloc>().add(
