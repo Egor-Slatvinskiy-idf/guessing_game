@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:presentation/new_bloc/new_ui/main_screen.dart';
+import 'package:presentation/ui/home_widget/home_widget.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -8,7 +8,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MainScreenWidget(),
+      home: HomeWidget(),
     );
   }
 }

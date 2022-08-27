@@ -60,7 +60,7 @@ class MainBlocImpl extends BlocImpl implements MainBloc {
   @override
   void guessedCheckNum() {
     final enteredNum = _textController.text;
-    final params = Num(guessedNum: enteredNum, randomNum: randomNum);
+    final params = Num(enteredNum: enteredNum, randomNum: randomNum);
     final isGuessSuccess = _checkUseCase(params);
     if (isGuessSuccess) {
       handleData(state: MainState.success, counter: --copyCounter, randomNum: randomNum);

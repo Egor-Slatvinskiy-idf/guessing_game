@@ -1,9 +1,9 @@
 class Num {
-  final String guessedNum;
+  final String enteredNum;
   final String? randomNum;
 
   Num({
-    required this.guessedNum,
+    required this.enteredNum,
     required this.randomNum,
   });
 }

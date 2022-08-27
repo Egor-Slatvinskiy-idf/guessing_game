@@ -6,14 +6,14 @@ import 'package:presentation/new_bloc/base_bloc/bloc_screen.dart';
 import 'package:presentation/new_bloc/bloc/main_bloc.dart';
 import 'package:presentation/new_bloc/bloc/main_tile.dart';
 
-class MainScreenWidget extends BlocScreen {
-  const MainScreenWidget({Key? key}) : super(key: key);
+class HomeWidget extends BlocScreen {
+  const HomeWidget({Key? key}) : super(key: key);
 
   @override
   State createState() => _MainHomeWidgetState();
 }
 
-class _MainHomeWidgetState extends BlocScreenState<MainScreenWidget, MainBloc> {
+class _MainHomeWidgetState extends BlocScreenState<HomeWidget, MainBloc> {
   _MainHomeWidgetState()
       : super(
           MainBloc(
