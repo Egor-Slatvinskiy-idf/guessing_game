@@ -1,6 +1,10 @@
 import 'package:presentation/entity/model_guessed_game.dart';
 
-enum MainState { initial, success, failure }
+enum MainState {
+  initial,
+  success,
+  failure,
+}
 
 class MainTile {
   MainState state;
@@ -19,7 +23,11 @@ class MainTile {
         MainState.initial,
       );
 
-  MainTile copy() => MainTile(randomNum, counter, state);
+  MainTile copy() => MainTile(
+        randomNum,
+        counter,
+        state,
+      );
 
   void updateParams(
     MainState? state,

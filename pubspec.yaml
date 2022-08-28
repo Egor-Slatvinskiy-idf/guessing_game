@@ -12,12 +12,11 @@ dependencies:
     sdk: flutter
   presentation:
     path: packages/presentation
+  domain:
+    path: packages/domain
 
-
+  get_it: ^7.2.0
   cupertino_icons: ^1.0.2
-  bloc: ^8.1.0
-  equatable: ^2.0.5
-  flutter_bloc: ^8.1.1
 
 dev_dependencies:
   flutter_test:

@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:presentation/new_bloc/bloc/main_tile.dart';
+import 'package:presentation/new_cubit/cubit/main_tile.dart';
 
-abstract class Bloc {
+abstract class Cubit {
   Stream<MainTile> get dataStream;
 
   void initState();
 }
 
-abstract class BlocImpl implements Bloc {
+abstract class CubitImpl implements Cubit {
   final _data = StreamController<MainTile>();
-  final _blocTile = MainTile.init();
+  final _cubitTile = MainTile.init();
 
   @override
   Stream<MainTile> get dataStream => _data.stream;
@@ -21,12 +21,12 @@ abstract class BlocImpl implements Bloc {
     int? counter,
     String? randomNum,
   }) {
-    _blocTile.updateParams(
+    _cubitTile.updateParams(
       state,
       counter,
       randomNum,
     );
-    _data.add(_blocTile.copy());
+    _data.add(_cubitTile.copy());
   }
 
   @override

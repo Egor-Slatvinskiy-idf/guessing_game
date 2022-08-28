@@ -1,31 +1,27 @@
-import 'package:domain/use_case/check_use_case.dart';
-import 'package:domain/use_case/generate_use_case.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:presentation/entity/model_guessed_game.dart';
-import 'package:presentation/new_bloc/base_bloc/bloc_screen.dart';
-import 'package:presentation/new_bloc/bloc/main_bloc.dart';
-import 'package:presentation/new_bloc/bloc/main_tile.dart';
+import 'package:presentation/new_cubit/base_cubit/cubit_screen.dart';
+import 'package:presentation/new_cubit/cubit/main_cubit.dart';
+import 'package:presentation/new_cubit/cubit/main_tile.dart';
 
-class HomeWidget extends BlocScreen {
+class HomeWidget extends CubitScreen {
   const HomeWidget({Key? key}) : super(key: key);
 
   @override
-  State createState() => _MainHomeWidgetState();
+  State createState() => _HomeWidgetState();
 }
 
-class _MainHomeWidgetState extends BlocScreenState<HomeWidget, MainBloc> {
-  _MainHomeWidgetState()
+class _HomeWidgetState extends CubitScreenState<HomeWidget, MainCubit> {
+  _HomeWidgetState()
       : super(
-          MainBloc(
-            GenerateNumUseCase(),
-            CheckNumUseCase(),
-          ),
+          GetIt.instance.get<MainCubit>(),
         );
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<MainTile>(
-        stream: bloc.dataStream,
+        stream: cubit.dataStream,
         builder: (context, snapshot) {
           final data = snapshot.data;
           if (data == null) {
@@ -42,15 +38,15 @@ class _MainHomeWidgetState extends BlocScreenState<HomeWidget, MainBloc> {
                 Column(
                   children: [
                     _FormWidget(
-                      bloc: bloc,
+                      bloc: cubit,
                       tile: data,
                     ),
                     _TextFieldWidget(
-                      bloc: bloc,
+                      bloc: cubit,
                       tile: data,
                     ),
                     _ButtonsWidget(
-                      bloc: bloc,
+                      bloc: cubit,
                       tile: data,
                     ),
                   ],
@@ -64,7 +60,7 @@ class _MainHomeWidgetState extends BlocScreenState<HomeWidget, MainBloc> {
 }
 
 class _FormWidget extends StatelessWidget {
-  final MainBloc bloc;
+  final MainCubit bloc;
   final MainTile tile;
 
   const _FormWidget({
@@ -110,7 +106,7 @@ class _FormWidget extends StatelessWidget {
 }
 
 class _TextFieldWidget extends StatelessWidget {
-  final MainBloc bloc;
+  final MainCubit bloc;
   final MainTile tile;
 
   const _TextFieldWidget({
@@ -150,7 +146,7 @@ class _TextFieldWidget extends StatelessWidget {
 }
 
 class _ButtonsWidget extends StatelessWidget {
-  final MainBloc bloc;
+  final MainCubit bloc;
   final MainTile tile;
 
   const _ButtonsWidget({

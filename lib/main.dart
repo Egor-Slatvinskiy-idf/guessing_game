@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:presentation/ui/my_app.dart';
+import 'package:untitled1/di/impl_dependency.dart';
 
 void main() {
-  runApp(const MyApp());
+  implDependency();
+  runApp(
+    const MyApp(),
+  );
 }
