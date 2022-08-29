@@ -78,13 +78,19 @@ class _FormWidget extends StatelessWidget {
           if (tile.state == MainState.success) ...[
             const Text(
               'you guessed!',
-              style: TextStyle(fontSize: 16, color: Colors.blue),
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.blue,
+              ),
             ),
           ],
           if (tile.state == MainState.failure) ...[
             const Text(
               'unsuccessful attempt',
-              style: TextStyle(fontSize: 16, color: Colors.red),
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.red,
+              ),
             ),
           ],
           const SizedBox(height: 10),
@@ -130,7 +136,11 @@ class _TextFieldWidget extends StatelessWidget {
         keyboardType: TextInputType.number,
         autofocus: true,
         controller: bloc.textController,
-        style: const TextStyle(color: Colors.black, fontSize: 24, height: 2),
+        style: const TextStyle(
+          color: Colors.black,
+          fontSize: 24,
+          height: 2,
+        ),
         decoration: const InputDecoration(
           labelText: '0 to 3',
           labelStyle: TextStyle(
@@ -138,7 +148,9 @@ class _TextFieldWidget extends StatelessWidget {
           ),
           enabledBorder: styleBorder,
           focusedBorder: styleBorder,
-          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 10,
+          ),
         ),
       ),
     );
@@ -168,7 +180,9 @@ class _ButtonsWidget extends StatelessWidget {
                   bloc.guessedRestart();
                 }
               : null,
-          child: const Icon(Icons.refresh),
+          child: const Icon(
+            Icons.refresh,
+          ),
         ),
         const SizedBox(
           width: 5,
@@ -180,7 +194,9 @@ class _ButtonsWidget extends StatelessWidget {
                   bloc.guessedCheckNum();
                 }
               : null,
-          child: const Icon(Icons.done),
+          child: const Icon(
+            Icons.done,
+          ),
         ),
       ],
     );
@@ -228,7 +244,10 @@ class _HeaderWidget extends StatelessWidget {
       padding: EdgeInsets.only(top: 20.0),
       child: Text(
         'Welcome, guess the number from zero to three',
-        style: TextStyle(color: Colors.black, fontSize: 24),
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 24,
+        ),
       ),
     );
   }

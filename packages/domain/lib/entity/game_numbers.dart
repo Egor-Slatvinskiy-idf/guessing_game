@@ -1,8 +1,8 @@
-class Num {
+class GameNumbers {
   final String enteredNum;
   final String? randomNum;
 
-  Num({
+  GameNumbers({
     required this.enteredNum,
     required this.randomNum,
   });

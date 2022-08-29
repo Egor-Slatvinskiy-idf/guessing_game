@@ -1,4 +1,4 @@
-import 'package:domain/entity/number.dart';
+import 'package:domain/entity/game_numbers.dart';
 import 'package:domain/use_case/check_use_case.dart';
 import 'package:domain/use_case/generate_use_case.dart';
 import 'package:flutter/widgets.dart';
@@ -62,7 +62,7 @@ class MainCubitImpl extends CubitImpl implements MainCubit {
   @override
   void guessedCheckNum() {
     final enteredNum = _textController.text;
-    final params = Num(
+    final params = GameNumbers(
       enteredNum: enteredNum,
       randomNum: randomNum,
     );
