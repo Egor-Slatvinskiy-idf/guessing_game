@@ -1,12 +1,8 @@
-import 'package:domain/use_case/check_use_case.dart';
-import 'package:domain/use_case/generate_use_case.dart';
+import 'package:domain/di/domain_dependency.config.dart';
 import 'package:get_it/get_it.dart';
+import 'package:injectable/injectable.dart';
 
-void injectsDependencyDomain() {
-  GetIt.instance.registerFactory(
-    () => CheckNumUseCase(),
-  );
-  GetIt.instance.registerFactory(
-    () => GenerateNumUseCase(),
-  );
-}
+
+@InjectableInit()
+void injectsDependencyDomain(GetIt getIt) => $initGetIt(getIt);
+

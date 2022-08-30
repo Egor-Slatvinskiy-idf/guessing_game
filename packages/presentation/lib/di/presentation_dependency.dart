@@ -1,13 +1,22 @@
-import 'package:domain/use_case/check_use_case.dart';
-import 'package:domain/use_case/generate_use_case.dart';
 import 'package:get_it/get_it.dart';
-import 'package:presentation/new_cubit/cubit/main_cubit.dart';
+import 'package:injectable/injectable.dart';
+import 'package:presentation/di/presentation_dependency.config.dart';
 
-void injectsDependencyPresentation() {
-  GetIt.instance.registerFactory<MainCubit>(
-    () => MainCubit(
-      GetIt.instance.get<GenerateNumUseCase>(),
-      GetIt.instance.get<CheckNumUseCase>(),
-    ),
-  );
+@injectableInit
+void injectsDependencyPresentation(GetIt getIt) => $initGetIt(getIt);
+
+@module
+abstract class DomainUseCase {
+  CheckNumUseCase();
+  GenerateNumUseCase();
+
 }
+
+// void injectsDependencyPresentation() {
+//   GetIt.instance.registerFactory<MainCubit>(
+//     () => MainCubit(
+//       GetIt.instance.get<GenerateNumUseCase>(),
+//       GetIt.instance.get<CheckNumUseCase>(),
+//     ),
+//   );
+// }

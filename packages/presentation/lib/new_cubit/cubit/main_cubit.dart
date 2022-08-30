@@ -2,11 +2,14 @@ import 'package:domain/entity/copy_numbers.dart';
 import 'package:domain/use_case/check_use_case.dart';
 import 'package:domain/use_case/generate_use_case.dart';
 import 'package:flutter/widgets.dart';
+import 'package:injectable/injectable.dart';
 import 'package:presentation/entity/initial_numbers.dart';
 import 'package:presentation/new_cubit/base_cubit/cubit.dart';
 import 'package:presentation/new_cubit/cubit/main_tile.dart';
 
+@injectable
 abstract class MainCubit extends Cubit<MainTile> {
+  @factoryMethod
   factory MainCubit(
     GenerateNumUseCase generateNumUseCase,
     CheckNumUseCase checkNumUseCase,
