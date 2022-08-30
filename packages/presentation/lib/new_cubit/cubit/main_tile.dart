@@ -1,4 +1,4 @@
-import 'package:presentation/entity/model_guessed_game.dart';
+import 'package:presentation/entity/initial_numbers.dart';
 
 enum MainState {
   initial,
@@ -7,35 +7,30 @@ enum MainState {
 }
 
 class MainTile {
+  final int counter;
   MainState state;
-  int counter;
   String randomNum;
 
-  MainTile(
-    this.randomNum,
-    this.counter,
-    this.state,
-  );
+  MainTile({
+    required this.randomNum,
+    required this.counter,
+    required this.state,
+  });
 
-  factory MainTile.init() => MainTile(
-        Model.initRandomNum,
-        3,
-        MainState.initial,
-      );
-
-  MainTile copy() => MainTile(
-        randomNum,
-        counter,
-        state,
-      );
-
-  void updateParams(
+  MainTile copyWith({
     MainState? state,
     int? counter,
     String? randomNum,
-  ) {
-    if (counter != null) this.counter = counter;
-    if (randomNum != null) this.randomNum = randomNum;
-    if (state != null) this.state = state;
-  }
+  }) =>
+      MainTile(
+        randomNum: randomNum ?? this.randomNum,
+        counter: counter ?? this.counter,
+        state: state ?? this.state,
+      );
+
+  factory MainTile.init() => MainTile(
+        randomNum: InitialNumbers.initRandomNum,
+        state: MainState.initial,
+        counter: 3,
+      );
 }

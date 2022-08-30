@@ -1,32 +1,24 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:presentation/new_cubit/cubit/main_tile.dart';
+import 'package:presentation/new_cubit/base_cubit/data/tile_wrapper.dart';
 
-abstract class Cubit {
-  Stream<MainTile> get dataStream;
+abstract class Cubit<D> {
+  Stream<TileWrapper<D>> get dataStream;
 
   void initState();
 }
 
-abstract class CubitImpl implements Cubit {
-  final _data = StreamController<MainTile>();
-  final _cubitTile = MainTile.init();
+abstract class CubitImpl<D> implements Cubit<D> {
+  final _data = StreamController<TileWrapper<D>>();
+  var _blocTile = TileWrapper<D>();
 
   @override
-  Stream<MainTile> get dataStream => _data.stream;
+  Stream<TileWrapper<D>> get dataStream => _data.stream;
 
   @protected
-  void handleData({
-    MainState? state,
-    int? counter,
-    String? randomNum,
-  }) {
-    _cubitTile.updateParams(
-      state,
-      counter,
-      randomNum,
-    );
-    _data.add(_cubitTile.copy());
+  void handleData({D? tile}) {
+    _blocTile = _blocTile.copyWith(data: tile);
+    _data.add(_blocTile);
   }
 
   @override

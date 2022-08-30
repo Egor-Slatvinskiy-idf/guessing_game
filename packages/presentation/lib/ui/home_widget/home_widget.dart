@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:presentation/entity/model_guessed_game.dart';
 import 'package:presentation/new_cubit/base_cubit/cubit_screen.dart';
+import 'package:presentation/new_cubit/base_cubit/data/tile_wrapper.dart';
 import 'package:presentation/new_cubit/cubit/main_cubit.dart';
 import 'package:presentation/new_cubit/cubit/main_tile.dart';
 
-class HomeWidget extends CubitScreen {
+class HomeWidget extends StatefulWidget {
   const HomeWidget({Key? key}) : super(key: key);
 
   @override
@@ -13,18 +12,15 @@ class HomeWidget extends CubitScreen {
 }
 
 class _HomeWidgetState extends CubitScreenState<HomeWidget, MainCubit> {
-  _HomeWidgetState()
-      : super(
-          GetIt.instance.get<MainCubit>(),
-        );
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<MainTile>(
+    return StreamBuilder<TileWrapper<MainTile>>(
         stream: cubit.dataStream,
         builder: (context, snapshot) {
           final data = snapshot.data;
-          if (data == null) {
+          final tile = data?.data;
+          if (data == null || tile == null || data.isLoading) {
             return const Center(
               child: CircularProgressIndicator(),
             );
@@ -38,16 +34,16 @@ class _HomeWidgetState extends CubitScreenState<HomeWidget, MainCubit> {
                 Column(
                   children: [
                     _FormWidget(
-                      bloc: cubit,
-                      tile: data,
+                      cubit: cubit,
+                      tile: tile,
                     ),
                     _TextFieldWidget(
-                      bloc: cubit,
-                      tile: data,
+                      cubit: cubit,
+                      tile: tile,
                     ),
                     _ButtonsWidget(
-                      bloc: cubit,
-                      tile: data,
+                      cubit: cubit,
+                      tile: tile,
                     ),
                   ],
                 ),
@@ -60,12 +56,12 @@ class _HomeWidgetState extends CubitScreenState<HomeWidget, MainCubit> {
 }
 
 class _FormWidget extends StatelessWidget {
-  final MainCubit bloc;
+  final MainCubit cubit;
   final MainTile tile;
 
   const _FormWidget({
     Key? key,
-    required this.bloc,
+    required this.cubit,
     required this.tile,
   }) : super(key: key);
 
@@ -112,12 +108,12 @@ class _FormWidget extends StatelessWidget {
 }
 
 class _TextFieldWidget extends StatelessWidget {
-  final MainCubit bloc;
+  final MainCubit cubit;
   final MainTile tile;
 
   const _TextFieldWidget({
     Key? key,
-    required this.bloc,
+    required this.cubit,
     required this.tile,
   }) : super(key: key);
 
@@ -135,7 +131,7 @@ class _TextFieldWidget extends StatelessWidget {
       child: TextField(
         keyboardType: TextInputType.number,
         autofocus: true,
-        controller: bloc.textController,
+        controller: cubit.textController,
         style: const TextStyle(
           color: Colors.black,
           fontSize: 24,
@@ -158,12 +154,12 @@ class _TextFieldWidget extends StatelessWidget {
 }
 
 class _ButtonsWidget extends StatelessWidget {
-  final MainCubit bloc;
+  final MainCubit cubit;
   final MainTile tile;
 
   const _ButtonsWidget({
     Key? key,
-    required this.bloc,
+    required this.cubit,
     required this.tile,
   }) : super(key: key);
 
@@ -173,13 +169,7 @@ class _ButtonsWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ElevatedButton(
-          onPressed: tile.state == MainState.success ||
-                  tile.counter == Model.initCounter &&
-                      tile.state != MainState.success
-              ? () {
-                  bloc.guessedRestart();
-                }
-              : null,
+          onPressed: cubit.onRefreshClick(),
           child: const Icon(
             Icons.refresh,
           ),
@@ -188,12 +178,7 @@ class _ButtonsWidget extends StatelessWidget {
           width: 5,
         ),
         ElevatedButton(
-          onPressed: tile.state == MainState.initial ||
-                  tile.state == MainState.failure && tile.counter > 0
-              ? () {
-                  bloc.guessedCheckNum();
-                }
-              : null,
+          onPressed: cubit.onDoneClick(),
           child: const Icon(
             Icons.done,
           ),

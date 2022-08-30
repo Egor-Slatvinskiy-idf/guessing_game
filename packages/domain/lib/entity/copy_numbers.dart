@@ -1,8 +1,8 @@
-class GameNumbers {
+class CopyNumbers {
   final String enteredNum;
   final String? randomNum;
 
-  GameNumbers({
+  CopyNumbers({
     required this.enteredNum,
     required this.randomNum,
   });

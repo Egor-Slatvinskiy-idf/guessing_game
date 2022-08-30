@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:guessed_game_labaratory_idf/di/injects_dependency.dart';
 import 'package:presentation/ui/my_app.dart';
-import 'package:untitled1/di/impl_dependency.dart';
 
 void main() {
-  implDependency();
+  injectsDependency();
   runApp(
     const MyApp(),
   );

@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:presentation/new_cubit/base_cubit/cubit.dart';
 
-abstract class CubitScreen extends StatefulWidget {
-  const CubitScreen({Key? key}) : super(key: key);
-}
-
-abstract class CubitScreenState<CS extends CubitScreen, C extends Cubit> extends State<CS> {
-  CubitScreenState(Cubit this.cubit);
+abstract class CubitScreenState<CS extends StatefulWidget, C extends Cubit> extends State {
   @protected
-  final cubit;
+  final C cubit = GetIt.instance.get<C>();
 
   @override
   void initState() {
     super.initState();
     cubit.initState();
   }
-
 }

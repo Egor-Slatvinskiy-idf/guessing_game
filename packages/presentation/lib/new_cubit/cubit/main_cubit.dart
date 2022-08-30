@@ -1,11 +1,12 @@
-import 'package:domain/entity/game_numbers.dart';
+import 'package:domain/entity/copy_numbers.dart';
 import 'package:domain/use_case/check_use_case.dart';
 import 'package:domain/use_case/generate_use_case.dart';
 import 'package:flutter/widgets.dart';
+import 'package:presentation/entity/initial_numbers.dart';
 import 'package:presentation/new_cubit/base_cubit/cubit.dart';
 import 'package:presentation/new_cubit/cubit/main_tile.dart';
 
-abstract class MainCubit extends Cubit {
+abstract class MainCubit extends Cubit<MainTile> {
   factory MainCubit(
     GenerateNumUseCase generateNumUseCase,
     CheckNumUseCase checkNumUseCase,
@@ -15,20 +16,21 @@ abstract class MainCubit extends Cubit {
         generateNumUseCase,
       );
 
-  void guessedRestart();
+  Function()? onRefreshClick();
 
-  void guessedCheckNum();
+  Function()? onDoneClick();
 
   TextEditingController get textController;
 }
 
-class MainCubitImpl extends CubitImpl implements MainCubit {
-  final _tile = MainTile.init();
+class MainCubitImpl extends CubitImpl<MainTile> implements MainCubit {
+  var _tile = MainTile.init();
   final _textController = TextEditingController();
   final CheckNumUseCase _checkUseCase;
   final GenerateNumUseCase _generateUseCase;
-  int copyCounter = 3;
-  String? randomNum;
+
+  @override
+  TextEditingController get textController => _textController;
 
   MainCubitImpl(
     this._checkUseCase,
@@ -44,44 +46,46 @@ class MainCubitImpl extends CubitImpl implements MainCubit {
   _updateData(
     MainTile data,
   ) {
-    randomNum = _generateUseCase();
-    copyCounter = data.counter;
-    handleData(
-      state: data.state,
-      counter: data.counter,
-      randomNum: randomNum,
-    );
+    _tile.randomNum = _generateUseCase();
+    handleData(tile: _tile);
   }
 
-  @override
   void guessedRestart() {
-    randomNum = _generateUseCase();
-    _updateData(_tile);
+    _tile = MainTile.init();
+    _tile.randomNum = _generateUseCase();
+    handleData(tile: _tile);
   }
 
-  @override
   void guessedCheckNum() {
     final enteredNum = _textController.text;
-    final params = GameNumbers(
+    final params = CopyNumbers(
       enteredNum: enteredNum,
-      randomNum: randomNum,
+      randomNum: _tile.randomNum,
     );
     final isGuessSuccess = _checkUseCase(params);
+    _tile = _tile.copyWith(counter: _tile.counter - 1);
     if (isGuessSuccess) {
-      handleData(
-        state: MainState.success,
-        counter: --copyCounter,
-        randomNum: randomNum,
-      );
+      _tile = _tile.copyWith(state: MainState.success);
     } else {
-      handleData(
-        state: MainState.failure,
-        counter: --copyCounter,
-        randomNum: randomNum,
-      );
+      _tile = _tile.copyWith(state: MainState.failure);
     }
+    handleData(tile: _tile);
   }
 
   @override
-  TextEditingController get textController => _textController;
+  Function()? onDoneClick() => _tile.state == MainState.initial ||
+      _tile.state == MainState.failure && _tile.counter > 0
+      ? () {
+    guessedCheckNum();
+  }
+      : null;
+
+  @override
+  Function()? onRefreshClick() => _tile.state == MainState.success ||
+      _tile.counter == InitialNumbers.initCounter && _tile.state != MainState.success
+      ? () {
+    guessedRestart();
+  }
+      : null;
+
 }
