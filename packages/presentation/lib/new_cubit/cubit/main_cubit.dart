@@ -1,4 +1,4 @@
-import 'package:domain/entity/copy_numbers.dart';
+import 'package:domain/entity/parameters_check.dart';
 import 'package:domain/use_case/check_use_case.dart';
 import 'package:domain/use_case/generate_use_case.dart';
 import 'package:flutter/widgets.dart';

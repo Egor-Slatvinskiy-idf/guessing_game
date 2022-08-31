@@ -1,4 +1,4 @@
-import 'package:domain/entity/copy_numbers.dart';
+import 'package:domain/entity/parameters_check.dart';
 import 'package:domain/use_case/sample_use_case/use_case_in_out.dart';
 import 'package:injectable/injectable.dart';
 

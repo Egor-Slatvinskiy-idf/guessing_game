@@ -10,15 +10,15 @@ abstract class Cubit<D> {
 
 abstract class CubitImpl<D> implements Cubit<D> {
   final _data = StreamController<TileWrapper<D>>();
-  var _blocTile = TileWrapper<D>();
+  var _cubitTile = TileWrapper<D>();
 
   @override
   Stream<TileWrapper<D>> get dataStream => _data.stream;
 
   @protected
   void handleData({D? tile}) {
-    _blocTile = _blocTile.copyWith(data: tile);
-    _data.add(_blocTile);
+    _cubitTile = _cubitTile.copyWith(data: tile);
+    _data.add(_cubitTile);
   }
 
   @override
