@@ -1,4 +1,4 @@
-import 'package:domain/entity/copy_numbers.dart';
+import 'package:domain/entity/parameters_to_check.dart';
 import 'package:domain/use_case/check_use_case.dart';
 import 'package:domain/use_case/generate_use_case.dart';
 import 'package:flutter/widgets.dart';
@@ -51,41 +51,48 @@ class MainCubitImpl extends CubitImpl<MainTile> implements MainCubit {
   }
 
   void guessedRestart() {
-    _tile = MainTile.init();
-    _tile.randomNum = _generateUseCase();
+    _tile = _tile.copyWith(
+      state: MainState.initial,
+      counter: InitialNumbers.maxCounter,
+      randomNum: _generateUseCase(),
+    );
     handleData(tile: _tile);
   }
 
   void guessedCheckNum() {
     final enteredNum = _textController.text;
-    final params = CopyNumbers(
+    final params = ParametersToCheck(
       enteredNum: enteredNum,
       randomNum: _tile.randomNum,
     );
     final isGuessSuccess = _checkUseCase(params);
     _tile = _tile.copyWith(counter: _tile.counter - 1);
     if (isGuessSuccess) {
-      _tile = _tile.copyWith(state: MainState.success);
+      _tile = _tile.copyWith(
+        state: MainState.success,
+      );
     } else {
-      _tile = _tile.copyWith(state: MainState.failure);
+      _tile = _tile.copyWith(
+        state: MainState.failure,
+      );
     }
     handleData(tile: _tile);
   }
 
   @override
   Function()? onDoneClick() => _tile.state == MainState.initial ||
-      _tile.state == MainState.failure && _tile.counter > 0
+          _tile.state == MainState.failure && _tile.counter > 0
       ? () {
-    guessedCheckNum();
-  }
+          guessedCheckNum();
+        }
       : null;
 
   @override
   Function()? onRefreshClick() => _tile.state == MainState.success ||
-      _tile.counter == InitialNumbers.initCounter && _tile.state != MainState.success
+          _tile.counter == InitialNumbers.initCounter &&
+              _tile.state != MainState.success
       ? () {
-    guessedRestart();
-  }
+          guessedRestart();
+        }
       : null;
-
 }
