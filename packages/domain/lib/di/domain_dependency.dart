@@ -4,5 +4,5 @@ import 'package:injectable/injectable.dart';
 
 
 @InjectableInit()
-void injectsDependencyDomain(GetIt getIt) => $initGetIt(getIt);
+void initContainerDomain(GetIt getIt) => $initGetIt(getIt);
 

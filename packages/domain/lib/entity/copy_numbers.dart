@@ -1,8 +1,8 @@
-class CopyNumbers {
+class ParametersToCheck {
   final String enteredNum;
   final String? randomNum;
 
-  CopyNumbers({
+  ParametersToCheck({
     required this.enteredNum,
     required this.randomNum,
   });

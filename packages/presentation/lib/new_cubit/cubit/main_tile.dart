@@ -31,6 +31,6 @@ class MainTile {
   factory MainTile.init() => MainTile(
         randomNum: InitialNumbers.initRandomNum,
         state: MainState.initial,
-        counter: 3,
+        counter: InitialNumbers.maxCounter,
       );
 }

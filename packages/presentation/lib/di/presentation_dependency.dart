@@ -3,14 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:presentation/di/presentation_dependency.config.dart';
 
 @injectableInit
-void injectsDependencyPresentation(GetIt getIt) => $initGetIt(getIt);
-
-@module
-abstract class DomainUseCase {
-  CheckNumUseCase();
-  GenerateNumUseCase();
-
-}
+void initContainerPresentation(GetIt getIt) => $initGetIt(getIt);
 
 // void injectsDependencyPresentation() {
 //   GetIt.instance.registerFactory<MainCubit>(
