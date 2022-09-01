@@ -83,19 +83,23 @@ class MainCubitImpl extends CubitImpl<MainTile> implements MainCubit {
   }
 
   @override
-  Function()? onDoneClick() => _tile.state == MainState.initial ||
-          _tile.state == MainState.failure && _tile.counter > 0
-      ? () {
-          guessedCheckNum();
-        }
-      : null;
+  Function()? onDoneClick() {
+    return _tile.state == MainState.initial ||
+            _tile.state == MainState.failure && _tile.counter > 0
+        ? () {
+            guessedCheckNum();
+          }
+        : null;
+  }
 
   @override
-  Function()? onRefreshClick() => _tile.state == MainState.success ||
-          _tile.counter == InitialNumbers.initCounter &&
-              _tile.state != MainState.success
-      ? () {
-          guessedRestart();
-        }
-      : null;
+  Function()? onRefreshClick() {
+    return _tile.state == MainState.success ||
+            _tile.counter == InitialNumbers.initCounter &&
+                _tile.state != MainState.success
+        ? () {
+            guessedRestart();
+          }
+        : null;
+  }
 }

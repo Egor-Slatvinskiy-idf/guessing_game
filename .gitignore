@@ -9,6 +9,8 @@
 .history
 .svn/
 pubspec.lock
+/packages/domain/lib/di/domain_dependency.config.dart
+/packages/presentation/lib/di/presentation_dependency.config.dart
 migrate_working_dir/
 
 # IntelliJ related
