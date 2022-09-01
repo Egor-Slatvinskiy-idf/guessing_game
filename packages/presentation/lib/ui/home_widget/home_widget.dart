@@ -1,34 +1,26 @@
-import 'package:domain/use_case/check_use_case.dart';
-import 'package:domain/use_case/generate_use_case.dart';
 import 'package:flutter/material.dart';
-import 'package:presentation/entity/model_guessed_game.dart';
-import 'package:presentation/new_bloc/base_bloc/bloc_screen.dart';
-import 'package:presentation/new_bloc/bloc/main_bloc.dart';
-import 'package:presentation/new_bloc/bloc/main_tile.dart';
+import 'package:presentation/new_cubit/base_cubit/cubit_screen.dart';
+import 'package:presentation/new_cubit/base_cubit/data/tile_wrapper.dart';
+import 'package:presentation/new_cubit/cubit/main_cubit.dart';
+import 'package:presentation/new_cubit/cubit/main_tile.dart';
 
-class HomeWidget extends BlocScreen {
+class HomeWidget extends StatefulWidget {
   const HomeWidget({Key? key}) : super(key: key);
 
   @override
-  State createState() => _MainHomeWidgetState();
+  State createState() => _HomeWidgetState();
 }
 
-class _MainHomeWidgetState extends BlocScreenState<HomeWidget, MainBloc> {
-  _MainHomeWidgetState()
-      : super(
-          MainBloc(
-            GenerateNumUseCase(),
-            CheckNumUseCase(),
-          ),
-        );
+class _HomeWidgetState extends CubitScreenState<HomeWidget, MainCubit> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<MainTile>(
-        stream: bloc.dataStream,
+    return StreamBuilder<TileWrapper<MainTile>>(
+        stream: cubit.dataStream,
         builder: (context, snapshot) {
           final data = snapshot.data;
-          if (data == null) {
+          final tile = data?.data;
+          if (data == null || tile == null || data.isLoading) {
             return const Center(
               child: CircularProgressIndicator(),
             );
@@ -42,16 +34,16 @@ class _MainHomeWidgetState extends BlocScreenState<HomeWidget, MainBloc> {
                 Column(
                   children: [
                     _FormWidget(
-                      bloc: bloc,
-                      tile: data,
+                      cubit: cubit,
+                      tile: tile,
                     ),
                     _TextFieldWidget(
-                      bloc: bloc,
-                      tile: data,
+                      cubit: cubit,
+                      tile: tile,
                     ),
                     _ButtonsWidget(
-                      bloc: bloc,
-                      tile: data,
+                      cubit: cubit,
+                      tile: tile,
                     ),
                   ],
                 ),
@@ -64,12 +56,12 @@ class _MainHomeWidgetState extends BlocScreenState<HomeWidget, MainBloc> {
 }
 
 class _FormWidget extends StatelessWidget {
-  final MainBloc bloc;
+  final MainCubit cubit;
   final MainTile tile;
 
   const _FormWidget({
     Key? key,
-    required this.bloc,
+    required this.cubit,
     required this.tile,
   }) : super(key: key);
 
@@ -82,13 +74,19 @@ class _FormWidget extends StatelessWidget {
           if (tile.state == MainState.success) ...[
             const Text(
               'you guessed!',
-              style: TextStyle(fontSize: 16, color: Colors.blue),
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.blue,
+              ),
             ),
           ],
           if (tile.state == MainState.failure) ...[
             const Text(
               'unsuccessful attempt',
-              style: TextStyle(fontSize: 16, color: Colors.red),
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.red,
+              ),
             ),
           ],
           const SizedBox(height: 10),
@@ -110,12 +108,12 @@ class _FormWidget extends StatelessWidget {
 }
 
 class _TextFieldWidget extends StatelessWidget {
-  final MainBloc bloc;
+  final MainCubit cubit;
   final MainTile tile;
 
   const _TextFieldWidget({
     Key? key,
-    required this.bloc,
+    required this.cubit,
     required this.tile,
   }) : super(key: key);
 
@@ -133,8 +131,12 @@ class _TextFieldWidget extends StatelessWidget {
       child: TextField(
         keyboardType: TextInputType.number,
         autofocus: true,
-        controller: bloc.textController,
-        style: const TextStyle(color: Colors.black, fontSize: 24, height: 2),
+        controller: cubit.textController,
+        style: const TextStyle(
+          color: Colors.black,
+          fontSize: 24,
+          height: 2,
+        ),
         decoration: const InputDecoration(
           labelText: '0 to 3',
           labelStyle: TextStyle(
@@ -142,7 +144,9 @@ class _TextFieldWidget extends StatelessWidget {
           ),
           enabledBorder: styleBorder,
           focusedBorder: styleBorder,
-          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 10,
+          ),
         ),
       ),
     );
@@ -150,12 +154,12 @@ class _TextFieldWidget extends StatelessWidget {
 }
 
 class _ButtonsWidget extends StatelessWidget {
-  final MainBloc bloc;
+  final MainCubit cubit;
   final MainTile tile;
 
   const _ButtonsWidget({
     Key? key,
-    required this.bloc,
+    required this.cubit,
     required this.tile,
   }) : super(key: key);
 
@@ -165,26 +169,19 @@ class _ButtonsWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ElevatedButton(
-          onPressed: tile.state == MainState.success ||
-                  tile.counter == Model.initCounter &&
-                      tile.state != MainState.success
-              ? () {
-                  bloc.guessedRestart();
-                }
-              : null,
-          child: const Icon(Icons.refresh),
+          onPressed: cubit.onRefreshClick(),
+          child: const Icon(
+            Icons.refresh,
+          ),
         ),
         const SizedBox(
           width: 5,
         ),
         ElevatedButton(
-          onPressed: tile.state == MainState.initial ||
-                  tile.state == MainState.failure && tile.counter > 0
-              ? () {
-                  bloc.guessedCheckNum();
-                }
-              : null,
-          child: const Icon(Icons.done),
+          onPressed: cubit.onDoneClick(),
+          child: const Icon(
+            Icons.done,
+          ),
         ),
       ],
     );
@@ -232,7 +229,10 @@ class _HeaderWidget extends StatelessWidget {
       padding: EdgeInsets.only(top: 20.0),
       child: Text(
         'Welcome, guess the number from zero to three',
-        style: TextStyle(color: Colors.black, fontSize: 24),
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 24,
+        ),
       ),
     );
   }

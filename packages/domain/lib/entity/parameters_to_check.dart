@@ -1,8 +1,8 @@
-class Num {
+class ParametersToCheck {
   final String enteredNum;
   final String? randomNum;
 
-  Num({
+  ParametersToCheck({
     required this.enteredNum,
     required this.randomNum,
   });

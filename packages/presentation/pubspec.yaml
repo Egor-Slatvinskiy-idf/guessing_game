@@ -12,10 +12,6 @@ dependencies:
   domain:
     path: ../domain
 
-  bloc: ^8.1.0
-  equatable: ^2.0.5
-  flutter_bloc: ^8.1.1
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,9 +1,9 @@
-import 'package:domain/entity/number.dart';
+import 'package:domain/entity/parameters_to_check.dart';
 import 'package:domain/use_case/sample_use_case/use_case_in_out.dart';
 
-class CheckNumUseCase extends UseCaseInOut<Num, bool> {
+class CheckNumUseCase extends UseCaseInOut<ParametersToCheck, bool> {
   @override
-  bool call(Num params) {
+  bool call(ParametersToCheck params) {
     return params.enteredNum == params.randomNum;
   }
 }
